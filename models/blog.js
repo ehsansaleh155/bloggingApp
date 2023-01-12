@@ -1,7 +1,4 @@
 const mongoose = require("mongoose");
-const path = require("path");
-
-const blogImageBasePath = "uploads/blogImages";
 
 const blogSchema = new mongoose.Schema({
   title: {
@@ -26,7 +23,11 @@ const blogSchema = new mongoose.Schema({
     required: true,
     default: Date.now,
   },
-  blogImageName: {
+  blogImage: {
+    type: Buffer,
+    required: true,
+  },
+  blogImageType: {
     type: String,
     required: true,
   },
@@ -38,10 +39,11 @@ const blogSchema = new mongoose.Schema({
 });
 
 blogSchema.virtual("blogImagePath").get(function () {
-  if (this.blogImageName != null) {
-    return path.join("/", blogImageBasePath, this.blogImageName);
+  if (this.blogImage != null && this.blogImageType != null) {
+    return `data:${
+      this.blogImageType
+    };charset=utf-8;base64,${this.blogImage.toString("base64")}`;
   }
 });
 
 module.exports = mongoose.model("Blog", blogSchema);
-module.exports.blogImageBasePath = blogImageBasePath;

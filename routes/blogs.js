@@ -1,18 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
 const Blog = require("../models/blog");
 const Author = require("../models/author");
-const uploadPath = path.join("public", Blog.blogImageBasePath);
 const imageMimeTypes = ["image/jpeg", "image/png", "image/gif"];
-const upload = multer({
-  dest: uploadPath,
-  fileFilter: (req, file, callback) => {
-    callback(null, imageMimeTypes.includes(file.mimetype));
-  },
-});
 
 // All Blogs Route
 router.get("/", async (req, res) => {
@@ -43,33 +33,24 @@ router.get("/new", async (req, res) => {
 });
 
 // Create Blog Route
-router.post("/", upload.single("image"), async (req, res) => {
-  const fileName = req.file != null ? req.file.filename : null;
+router.post("/", async (req, res) => {
   const blog = new Blog({
     title: req.body.title,
     author: req.body.author,
     // publishDate: new Date(req.body.publishDate), ??? NEEDS CONSIDERATION
     // commentCount: req.body.commentCount, ??? NEEDS CONSIDERATION
-    blogImageName: fileName,
     description: req.body.description,
   });
+  saveImage(blog, req.body.image);
+
   try {
     const newBlog = await blog.save();
     // res.redirect('blogs/${newBlog.id}');
     res.redirect("blogs");
   } catch {
-    if (blog.blogImageName != null) {
-      removeBlogImage(blog.blogImageName);
-    }
     renderNewPage(res, blog, true);
   }
 });
-
-function removeBlogImage(fileName) {
-  fs.unlink(path.join(uploadPath, fileName), (err) => {
-    if (err) console.error(err);
-  });
-}
 
 async function renderNewPage(res, blog, hasError = false) {
   try {
@@ -82,6 +63,15 @@ async function renderNewPage(res, blog, hasError = false) {
     res.render("blogs/new", params);
   } catch {
     res.redirect("/blogs");
+  }
+}
+
+function saveImage(blog, imageEncoded) {
+  if (imageEncoded == null) return;
+  const image = JSON.parse(imageEncoded);
+  if (image != null && imageMimeTypes.includes(image.type)) {
+    blog.blogImage = new Buffer.from(image.data, "base64");
+    blog.blogImageType = image.type;
   }
 }
 
