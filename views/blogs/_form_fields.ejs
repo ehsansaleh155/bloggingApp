@@ -1,0 +1,34 @@
+<div>
+    <label>Title</label>
+    <input type="text" name="title" value="<%= blog.title %>">
+</div>
+<div>
+    <label>Author</label>
+    <select name="author">
+    <% authors.forEach(author => { %>
+        <% if (author.id === blog.author) { %>
+            <option selected label="<%= author.name %>" value="<%= author.id %>">
+        <% } else { %>
+            </option label="<%= author.name %>" value="<%= author.id %>">
+        <% } %>
+    <% }) %> 
+    </select>
+</div>
+//next section should be changed to be automatic !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+<div>
+    <label>Publish Date</label>
+    <input type="date" name="publishDate" value="<%= blog.publishDate == null ? '' : blog.publishDate.toISOString().split('T')[0] %>">
+</div>
+//next section should be changed to be automatic !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+<div>
+    <label>Comments</label>
+    <input type="number" name="commentCount" min="1" value="<%= blog.commentCount %>">
+</div>
+<div>
+    <label>Image</label>
+    <input type="file" name="image">
+</div>
+<div>
+    <label>Description</label>
+    <textarea name="description"><%= blog.description %></textarea>
+</div>
