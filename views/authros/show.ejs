@@ -5,5 +5,7 @@
 <h2>Blgos By Author</h2>
 <% blogsByAuthor.forEach(blog => { %>
 <div><%= blog.title %></div>
-<img height="150" width="150" src="<%= blog.blogImagePath %>" />
+<a href="/blogs/<%= blog.id %>">
+  <img height="150" width="150" src="<%= blog.blogImagePath %>" />
+</a>
 <% }) %> <% } %>
