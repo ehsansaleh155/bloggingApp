@@ -9,6 +9,9 @@ router.get("/", async (req, res) => {
   if (req.query.name != null && req.query.name !== "") {
     searchOptions.name = new RegExp(req.query.name, "i");
   }
+  if (req.query.email != null && req.query.email !== "") {
+    searchOptions.email = new RegExp(req.query.email, "i");
+  }
   try {
     const authors = await Author.find({ searchOptions });
     res.render("authors/index", {
@@ -29,6 +32,7 @@ router.get("/new", (req, res) => {
 router.post("/", async (req, res) => {
   const author = new Author({
     name: req.body.name,
+    email: req.body.email,
   });
   try {
     const newAuthor = await author.save();
@@ -68,8 +72,9 @@ router.put("/:id", async (req, res) => {
   try {
     author = await Author.findById(req.params.id);
     author.name = req.body.name;
+    author.email = req.body.email;
     await author.save();
-    res.redirect(`/authors/${newAuthor.id}`);
+    res.redirect(`/authors/${author.id}`);
   } catch {
     if (author == null) {
       res.redirect("/");
@@ -92,7 +97,7 @@ router.delete("/:id", async (req, res) => {
     if (author == null) {
       res.redirect("/");
     } else {
-      res.redirect(`/authors/${newAuthor.id}`);
+      res.redirect(`/authors/${author.id}`);
     }
   }
 });

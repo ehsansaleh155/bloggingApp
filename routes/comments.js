@@ -10,6 +10,12 @@ router.get("/", async (req, res) => {
   if (req.query.title != null && req.query.title != "") {
     query = query.regex("title", new RegExp(req.query.title, "i"));
   }
+  if (req.query.publishedBefore != null && req.query.publishedBefore != "") {
+    query = query.lte("publishDate", req.query.publishedBefore);
+  }
+  if (req.query.publishedAfter != null && req.query.publishedAfter != "") {
+    query = query.lte("publishDate", req.query.publishedAfter);
+  }
   try {
     const blogs = await query.exec();
     res.render("blogs/index", {
@@ -30,10 +36,13 @@ router.get("/new", async (req, res) => {
 router.post("/", async (req, res) => {
   const blog = new Blog({
     title: req.body.title,
-    content: req.body.content,
     author: req.body.author,
+    // publishDate: new Date(req.body.publishDate), ??? NEEDS CONSIDERATION
+    // commentCount: req.body.commentCount, ??? NEEDS CONSIDERATION
+    description: req.body.description,
   });
   saveImage(blog, req.body.image);
+
   try {
     const newBlog = await blog.save();
     res.redirect(`blogs/${newBlog.id}`);
@@ -45,10 +54,8 @@ router.post("/", async (req, res) => {
 // Show Blog Route
 router.get("/:id", async (req, res) => {
   try {
-    let blog = await Blog.findById(req.params.id).populate("author").exec();
-    blog.views++;
-    res.render("blogs/show", { blog: blog });
-    await blog.save();
+    const blog = await Blog.findById(req.params.id).populate("author").exec();
+    res.render("/blogs/show", { blog: blog });
   } catch {
     res.redirect("/");
   }
@@ -66,13 +73,20 @@ router.get("/:id/edit", async (req, res) => {
 
 // Update Blog Route
 router.put("/:id", async (req, res) => {
+  // const blog = new Blog({
+  //   title: req.body.title,
+  //   author: req.body.author,
+  //   // publishDate: new Date(req.body.publishDate), ??? NEEDS CONSIDERATION
+  //   // commentCount: req.body.commentCount, ??? NEEDS CONSIDERATION
+  //   description: req.body.description,
+  // });
   let blog;
   try {
     blog = await Blog.findById(req.params.id);
     blog.title = req.body.title;
-    blog.content = req.body.content;
     blog.author = req.body.author;
-    blog.views++;
+    blog.description = req.body.description;
+    blog.modifiedAt = new Date(Date.now);
     if (req.body.image != null && req.body.image !== "") {
       saveImage(blog, req.body.image);
     }
@@ -87,7 +101,6 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete Blog page
 router.delete("/:id", async (req, res) => {
   let blog;
   try {

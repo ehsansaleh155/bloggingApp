@@ -1,33 +1,17 @@
 <h2>Search Blogs</h2>
-<form action="/blogs" method="Get">
+<form action="/blogs" method="GET">
   <div>
     <label>Title</label>
-    <input type="text" name="title" value="<%= searchOptions.title %> " />
-  </div>
-  <div>
-    <label>Published After</label>
-    <input
-      type="date"
-      name="publishedAfter"
-      value="<%= searchOptions.publishedAfter %> "
-    />
-  </div>
-  <div>
-    <label>Published Before</label>
-    <input
-      type="date"
-      name="publishedBefore"
-      value="<%= searchOptions.publishedBefore %> "
-    />
+    <input type="text" name="title" value="<%= searchOptions.title %>">
   </div>
   <button type="submit">Search</button>
 </form>
-<br />
+<br>
 <div>
   <% blogs.forEach(blog => { %>
   <a href="/blogs/<%= blog.id %>">
     <div><%= blog.title %></div>
-    <img height="150" width="150" src="<%= blog.blogImagePath %>" />
+    <img height="150" width="150" src="<%= blog.blogImagePath %>">
   </a>
   <% }) %>
 </div>

@@ -1,9 +1,9 @@
 <h2><%= blog.title %></h2>
 <img height="150" width="150" src="<%= blog.blogImagePath %>" />
 <div>Author: <%= blog.author.name %></div>
-<div>Publish Date: <%= blog.publishDate.toDateString() %></div>
-<div>Comments: <%= blog.commentCount %></div>
-<div>Description: <%= blog.description %></div>
+<div>Views: <%= blog.views %></div>
+<div>Like: <%= blog.likes %></div> <%# Has to change to button to like the blog %>
+<div>Content: <%= blog.content %></div>
 
 <a href="/blogs/<%= blog.id %>/edit">Edit</a>
 <%- include('../partials/deleteForm', {url: `/blogs${blog.id}`}) %>

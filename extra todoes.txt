@@ -1,2 +1,2 @@
-in the file view/blogs/_form_fields.ejs there are things to be done 
-routes/blogs.js
+Add comments
+Blog Likes
