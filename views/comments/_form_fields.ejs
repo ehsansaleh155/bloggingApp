@@ -1,0 +1,20 @@
+<div>
+  <label>User Info</label>
+  <input type="text" name="userInfo" value="<%= comment.userInfo %>">
+</div>
+<div> <%# this part should be deleted %>
+  <label>Blog</label>
+  <select name="blog">
+    <% blogs.forEach(blog => { %>
+    <% if (blog.id === comment.blog) { %>
+    <option selected label="<%= blog.title %>" value="<%= blog.id %>">
+      <% } else { %>
+    </option label="<%= blog.title %>" value="<%= blog.id %>">
+    <% } %>
+    <% }) %>
+  </select>
+</div>
+<div>
+  <label>Comment</label>
+  <textarea name="commentText"><%= comment.commentText %></textarea>
+</div>

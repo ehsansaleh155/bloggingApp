@@ -9,7 +9,7 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  author: {
+  blog: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "Blog",

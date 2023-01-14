@@ -1,0 +1,17 @@
+<%# Pr. No need for this file %>
+<h2>Search Comments</h2>
+<form action="/comments" method="GET">
+  <div>
+    <label>User Info</label>
+    <input type="text" name="userInfo" value="<%= searchOptions.userInfo %>">
+  </div>
+  <button type="submit">Search</button>
+</form>
+<br>
+<div>
+  <% comments.forEach(comment => { %>
+  <a href="/comments/<%= comment.id %>">
+    <div><%= comment.userInfo %></div>
+  </a>
+  <% }) %>
+</div>

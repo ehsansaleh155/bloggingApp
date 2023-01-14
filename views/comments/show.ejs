@@ -1,0 +1,7 @@
+<%# The pathes need to change %>
+<h2><%= comment.userInfo %></h2>
+<div>Blog: <%= comment.blog.title %></div>
+<div>Comment: <%= comment.commentText %></div>
+
+<%- include('../partials/deleteForm', {url: `/comments/${comment.id}`}) %>
+<a href="/blogs/<%= comment.blog.id %>">View Blog</a>
