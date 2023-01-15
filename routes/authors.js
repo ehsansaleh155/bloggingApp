@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     searchOptions.email = new RegExp(req.query.email, "i");
   }
   try {
-    const authors = await Author.find({ searchOptions });
+    const authors = await Author.find(searchOptions);
     res.render("authors/index", {
       authors: authors,
       searchOptions: req.query,

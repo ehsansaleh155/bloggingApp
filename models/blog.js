@@ -15,11 +15,11 @@ const blogSchema = new mongoose.Schema({
     required: true,
     ref: "Author",
   },
-  blogImage: {
+  coverImage: {
     type: Buffer,
     required: true,
   },
-  blogImageType: {
+  coverImageType: {
     type: String,
     required: true,
   },
@@ -49,11 +49,11 @@ const blogSchema = new mongoose.Schema({
   // },
 });
 
-blogSchema.virtual("blogImagePath").get(function () {
-  if (this.blogImage != null && this.blogImageType != null) {
+blogSchema.virtual("coverImagePath").get(function () {
+  if (this.coverImage != null && this.coverImageType != null) {
     return `data:${
-      this.blogImageType
-    };charset=utf-8;base64,${this.blogImage.toString("base64")}`;
+      this.coverImageType
+    };charset=utf-8;base64,${this.coverImage.toString("base64")}`;
   }
 });
 
