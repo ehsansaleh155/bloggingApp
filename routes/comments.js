@@ -3,22 +3,22 @@ const router = express.Router();
 const Comment = require("../models/comment");
 const Blog = require("../models/blog");
 
-// All Comments Route
-router.get("/", async (req, res) => {
-  let query = Comment.find();
-  if (req.query.userInfo != null && req.query.userInfo != "") {
-    query = query.regex("userInfo", new RegExp(req.query.userInfo, "i"));
-  }
-  try {
-    const comments = await query.exec();
-    res.render("comments/index", {
-      comments: comments,
-      searchOptions: req.query,
-    });
-  } catch {
-    res.redirect("/");
-  }
-});
+// // All Comments Route
+// router.get("/", async (req, res) => {
+//   let query = Comment.find();
+//   if (req.query.userInfo != null && req.query.userInfo != "") {
+//     query = query.regex("userInfo", new RegExp(req.query.userInfo, "i"));
+//   }
+//   try {
+//     const comments = await query.exec();
+//     res.render("comments/index", {
+//       comments: comments,
+//       searchOptions: req.query,
+//     });
+//   } catch {
+//     res.redirect("/");
+//   }
+// });
 
 // New Comment Route
 router.get("/new", async (req, res) => {

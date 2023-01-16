@@ -1,4 +1,4 @@
-<h2>Search Blogs</h2>
+<h2>Search Blog</h2>
 <form action="/blogs" method="GET">
   <div>
     <label>Title</label>
@@ -11,7 +11,7 @@
   <% blogs.forEach(blog => { %>
   <a href="/blogs/<%= blog.id %>">
     <div><%= blog.title %></div>
-    <img height="150" width="150" src="<%= blog.blogImagePath %>">
+    <img height="150" width="100" src="<%= blog.coverImagePath %>">
   </a>
   <% }) %>
 </div>

@@ -17,7 +17,7 @@ authorSchema.pre("remove", function (next) {
     if (err) {
       next(err);
     } else if (blogs.length > 0) {
-      next(new Error("This author still has blog(s)!"));
+      next(new Error("This author has blogs still"));
     } else {
       next();
     }

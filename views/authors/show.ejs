@@ -1,13 +1,14 @@
 <h2><%= author.name %></h2>
 <h3><%= author.email %></h3>
 <a href="/authors/<%= author.id %>/edit">Edit</a>
-<%- include('../partials/deleteForm', { url: `/authors/${author.id}` }) %>
+<%- include('../partials/deleteForm',
+            { url: `/authors/${author.id}` }) %>
 <% if (blogsByAuthor.length > 0) { %>
-<h2>Blgos By Author</h2>
+<h2>Blogs By Author</h2>
 <% blogsByAuthor.forEach(blog => { %>
 <a href="/blogs/<%= blog.id %>">
   <div><%= blog.title %></div>
-  <img height="150" width="150" src="<%= blog.blogImagePath %>">
+  <img height="150" width="150" src="<%= blog.coverImagePath %>">
 </a>
 <% }) %>
 <% } %>

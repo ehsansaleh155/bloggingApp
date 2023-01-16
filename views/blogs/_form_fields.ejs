@@ -9,9 +9,9 @@
     <% if (author.id === blog.author) { %>
     <option selected label="<%= author.name %>" value="<%= author.id %>">
       <% } else { %>
-    </option label="<%= author.name %>" value="<%= author.id %>">
-    <% } %>
-    <% }) %>
+    <option label="<%= author.name %>" value="<%= author.id %>">
+      <% } %>
+      <% }) %>
   </select>
 </div>
 <div>
@@ -23,8 +23,8 @@
   <h3><%= blog.likes %></h3>
 </div>
 <div>
-  <label>Image</label>
-  <input type="file" name="image" class="filepond">
+  <label>Cover</label>
+  <input type="file" name="cover" class="filepond">
 </div>
 <div>
   <label>Content</label>

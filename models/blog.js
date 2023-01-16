@@ -33,20 +33,11 @@ const blogSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
-  // publishDate: {
-  //   type: Date,
-  //   required: true,
-  //   default: Date.now,
-  // },
-  // commentCount: {
-  //   type: Number,
-  //   required: true,
-  // },
-  // modifiedAt: {
-  //   type: Date,
-  //   required: true,
-  //   default: Date.now,
-  // },
+  publishDate: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
 });
 
 blogSchema.virtual("coverImagePath").get(function () {

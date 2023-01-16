@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Blog = require("../models/blog");
 const Author = require("../models/author");
-const imageMimeTypes = ["image/jpeg", "image/png", "image/gif"];
+const Comment = require("../models/comment");
+const imageMimeTypes = ["image/jpeg", "image/png", "images/gif"];
 
 // All Blogs Route
 router.get("/", async (req, res) => {
@@ -16,7 +17,8 @@ router.get("/", async (req, res) => {
       blogs: blogs,
       searchOptions: req.query,
     });
-  } catch {
+  } catch (e) {
+    console.log(e);
     res.redirect("/");
   }
 });
@@ -33,11 +35,12 @@ router.post("/", async (req, res) => {
     content: req.body.content,
     author: req.body.author,
   });
-  saveImage(blog, req.body.image);
+  saveCover(blog, req.body.cover);
   try {
     const newBlog = await blog.save();
     res.redirect(`blogs/${newBlog.id}`);
-  } catch {
+  } catch (e) {
+    console.log(e);
     renderNewPage(res, blog, true);
   }
 });
@@ -47,9 +50,11 @@ router.get("/:id", async (req, res) => {
   try {
     let blog = await Blog.findById(req.params.id).populate("author").exec();
     blog.views++;
-    res.render("blogs/show", { blog: blog });
+    const comments = await Comment.find({ blog: blog.id }).limit(10).exec();
+    res.render("blogs/show", { blog: blog, commentsForBlog: comments });
     await blog.save();
-  } catch {
+  } catch (e) {
+    console.log(e);
     res.redirect("/");
   }
 });
@@ -59,7 +64,8 @@ router.get("/:id/edit", async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
     renderEditPage(res, blog);
-  } catch {
+  } catch (e) {
+    console.log(e);
     res.redirect("/");
   }
 });
@@ -67,18 +73,20 @@ router.get("/:id/edit", async (req, res) => {
 // Update Blog Route
 router.put("/:id", async (req, res) => {
   let blog;
+
   try {
     blog = await Blog.findById(req.params.id);
     blog.title = req.body.title;
     blog.content = req.body.content;
     blog.author = req.body.author;
     blog.views++;
-    if (req.body.image != null && req.body.image !== "") {
-      saveImage(blog, req.body.image);
+    if (req.body.cover != null && req.body.cover !== "") {
+      saveCover(blog, req.body.cover);
     }
     await blog.save();
     res.redirect(`/blogs/${blog.id}`);
-  } catch {
+  } catch (e) {
+    console.log(e);
     if (blog != null) {
       renderEditPage(res, blog, true);
     } else {
@@ -87,14 +95,15 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete Blog page
+// Delete Blog Page
 router.delete("/:id", async (req, res) => {
   let blog;
   try {
     blog = await Blog.findById(req.params.id);
     await blog.remove();
     res.redirect("/blogs");
-  } catch {
+  } catch (e) {
+    console.log(e);
     if (blog != null) {
       res.render("blogs/show", {
         blog: blog,
@@ -129,17 +138,18 @@ async function renderFormPage(res, blog, form, hasError = false) {
       }
     }
     res.render(`blogs/${form}`, params);
-  } catch {
+  } catch (e) {
+    console.log(e);
     res.redirect("/blogs");
   }
 }
 
-function saveImage(blog, imageEncoded) {
-  if (imageEncoded == null) return;
-  const image = JSON.parse(imageEncoded);
-  if (image != null && imageMimeTypes.includes(image.type)) {
-    blog.blogImage = new Buffer.from(image.data, "base64");
-    blog.blogImageType = image.type;
+function saveCover(blog, coverEncoded) {
+  if (coverEncoded == null) return;
+  const cover = JSON.parse(coverEncoded);
+  if (cover != null && imageMimeTypes.includes(cover.type)) {
+    blog.coverImage = new Buffer.from(cover.data, "base64");
+    blog.coverImageType = cover.type;
   }
 }
 

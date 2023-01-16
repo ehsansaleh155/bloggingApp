@@ -14,11 +14,11 @@ const commentSchema = new mongoose.Schema({
     required: true,
     ref: "Blog",
   },
-  // publishDate: {
-  //   type: Date,
-  //   required: true,
-  //   default: Date.now,
-  // },
+  publishDate: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("Comment", commentSchema);
